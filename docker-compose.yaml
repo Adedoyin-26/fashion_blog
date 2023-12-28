@@ -1,0 +1,27 @@
+services:
+  db:
+    container_name: postgresql-container
+    restart: always
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=fashion_blog
+      - POSTGRES_PASSWORD=011235
+      - POSTGRES_USER=postgres
+    volumes:
+      - /Users/mac/Documents/postgres_container_data:/var/lib/postgresql/data
+  backend:
+    build:
+      Dockerfile
+    container_name: fashion_blog_container
+    image: fashion_blog_image
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fashion_blog
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=011235
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+    depends_on:
+      - db
